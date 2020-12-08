@@ -1,9 +1,9 @@
 FROM python:3.7
 
-RUN pip install fastapi uvicorn
+RUN pip install fastapi uvicorn tensorflow pandas
 
 EXPOSE 80
 
-COPY .. /
+COPY . /
 
-ENTRYPOINT  ["uvicorn", "main:app", "--host", "0.0.0.0", "--port", "80"]
+ENTRYPOINT  ["uvicorn", "api:app", "--host", "0.0.0.0", "--port", "80"]
