@@ -58,9 +58,16 @@
     methods: {
       async submitQuestionnaire() {
         console.log("submitting...");
-        const response = await axios.get("http://192.168.2.135/api/v1/devices");
-        console.log(response)
-        console.log(this.questions)
+        const data = {
+          X1: this.questions[0].answer,
+          X2: this.questions[1].answer,
+          X3: this.questions[2].answer,
+          X4: this.questions[3].answer,
+          X5: this.questions[4].answer,
+          X6: this.questions[5].answer
+        };
+        const response = await axios.post("/api/v1/happiness", data);
+        console.log(response);
       },
     },
     components: {}
