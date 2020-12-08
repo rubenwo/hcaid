@@ -8,12 +8,14 @@
         </div>
         <div v-else>Hello</div>
         <b-button @click="submitQuestionnaire()" variant="success">Button</b-button>
+        <response-modal ref="modal"/>
     </div>
 </template>
 
 <script>
   // @ is an alias to /src
   import axios from 'axios';
+  import ResponseModal from "../components/ResponseModal";
 
   export default {
     name: 'Home',
@@ -58,6 +60,7 @@
     methods: {
       async submitQuestionnaire() {
         console.log("submitting...");
+
         const data = {
           X1: this.questions[0].answer,
           X2: this.questions[1].answer,
@@ -66,10 +69,12 @@
           X5: this.questions[4].answer,
           X6: this.questions[5].answer
         };
-        const response = await axios.post("/api/v1/happiness", data);
+        const response = await axios.post("http://localhost/api/v1/happiness", data);
         console.log(response);
+        this.$refs.modal.$emit('response', response.data)
+
       },
     },
-    components: {}
+    components: {ResponseModal}
   }
 </script>
