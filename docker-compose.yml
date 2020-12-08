@@ -8,7 +8,7 @@ services:
       - 8090:80
 
   frontend.rwoldhui.svc.cluster.local:
-    build: ./frontend
+    build: ./frontend/web
     restart: on-failure
     ports:
       - 8091:80
