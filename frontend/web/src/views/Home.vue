@@ -1,13 +1,19 @@
 <template>
     <div class="home">
-        <div v-if="state === 'questions'">
-            <div v-bind:key="question.idx" v-for="question in this.questions">
-                <p>{{question.question}}</p>
-                <b-form-rating v-model="question.answer" variant="warning" class="mb-2"/>
+        <div v-if="!this.submitting">
+            <div v-if="state === 'questions'">
+                <div v-bind:key="question.idx" v-for="question in this.questions">
+                    <p>{{question.question}}</p>
+                    <b-form-rating v-model="question.answer" variant="warning" class="mb-2"/>
+                </div>
             </div>
+            <b-button @click="submitQuestionnaire()" variant="success">Submit</b-button>
+
         </div>
-        <div v-else>Hello</div>
-        <b-button @click="submitQuestionnaire()" variant="success">Button</b-button>
+        <div v-else>
+            <Loading :active.sync="this.submitting"
+                     :is-full-page="true"/>
+        </div>
         <response-modal ref="modal"/>
     </div>
 </template>
@@ -16,12 +22,14 @@
   // @ is an alias to /src
   import axios from 'axios';
   import ResponseModal from "../components/ResponseModal";
+  import Loading from 'vue-loading-overlay'
 
   export default {
     name: 'Home',
     data() {
       return {
         state: "questions",
+        submitting: false,
         questions: [
           {
             idx: 0,
@@ -60,6 +68,7 @@
     methods: {
       async submitQuestionnaire() {
         console.log("submitting...");
+        this.submitting = true;
 
         const data = {
           X1: this.questions[0].answer,
@@ -69,12 +78,20 @@
           X5: this.questions[4].answer,
           X6: this.questions[5].answer
         };
-        const response = await axios.post("http://localhost/api/v1/happiness", data);
+        const response = await axios.post("/api/v1/happiness", data);
         console.log(response);
+        this.submitting = false;
         this.$refs.modal.$emit('response', response.data)
 
       },
     },
-    components: {ResponseModal}
+    components: {ResponseModal, Loading}
   }
 </script>
+<style>
+    .home {
+        width: 50%;
+        margin: auto;
+    }
+
+</style>
