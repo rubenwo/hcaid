@@ -1,14 +1,20 @@
 version: "3"
 
 services:
+  gateway.rwoldhui.svc.cluster.local:
+    build: ./gateway-service
+    restart: on-failure
+    ports:
+      - 443:443
+      - 80:80
+    volumes:
+      - /mnt/gateway/certs:/certs
+      - ./ingress.yaml:/root/ingress.yaml
+
   backend.rwoldhui.svc.cluster.local:
     build: ./backend
     restart: on-failure
-    ports:
-      - 8090:80
 
-  frontend.rwoldhui.svc.cluster.local:
+  web.rwoldhui.svc.cluster.local:
     build: ./frontend/web
     restart: on-failure
-    ports:
-      - 8091:80

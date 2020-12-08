@@ -1,0 +1,7 @@
+apiVersion: v1
+spec:
+  - host: backend.rwoldhui.svc.cluster.local
+    path: "/happiness"
+    methods:
+      - POST
+    protocol: http
