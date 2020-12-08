@@ -1,0 +1,14 @@
+version: "3"
+
+services:
+  backend.rwoldhui.svc.cluster.local:
+    build: ./backend
+    restart: on-failure
+    ports:
+      - 8090:80
+
+  frontend.rwoldhui.svc.cluster.local:
+    build: ./frontend
+    restart: on-failure
+    ports:
+      - 8091:80
