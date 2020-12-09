@@ -6,11 +6,18 @@
                     <p>{{question.question}}</p>
                     <b-form-rating v-model="question.answer" variant="warning" class="mb-2"/>
                 </div>
+                <b-button @click="back()" style="width: 15%" variant="">Back</b-button>
+                <b-button @click="submitQuestionnaire()" style="width: 15%" variant="success">Submit</b-button>
             </div>
-            <b-button @click="submitQuestionnaire()" variant="success">Submit</b-button>
+            <div v-else-if="state === 'welcome'">
+                <welcome-comp/>
+                <b-button @click="next()" style="width: 15%" variant="success">Next</b-button>
+            </div>
+
 
         </div>
         <div v-else>
+            <h3>Loading results...</h3>
             <Loading :active.sync="this.submitting"
                      :is-full-page="true"/>
         </div>
@@ -23,12 +30,13 @@
   import axios from 'axios';
   import ResponseModal from "../components/ResponseModal";
   import Loading from 'vue-loading-overlay'
+  import WelcomeComp from "../components/WelcomeComp";
 
   export default {
     name: 'Home',
     data() {
       return {
-        state: "questions",
+        state: "welcome",
         submitting: false,
         questions: [
           {
@@ -84,8 +92,14 @@
         this.$refs.modal.$emit('response', response.data)
 
       },
+      next() {
+        if (this.state === 'welcome') this.state = 'questions';
+      },
+      back() {
+        if (this.state === 'questions') this.state = 'welcome';
+      },
     },
-    components: {ResponseModal, Loading}
+    components: {WelcomeComp, ResponseModal, Loading}
   }
 </script>
 <style>
