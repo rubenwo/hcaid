@@ -6,12 +6,12 @@
                     <p>{{question.question}}</p>
                     <b-form-rating v-model="question.answer" variant="warning" class="mb-2"/>
                 </div>
-                <b-button @click="back()" style="width: 15%" variant="">Back</b-button>
-                <b-button @click="submitQuestionnaire()" style="width: 15%" variant="success">Submit</b-button>
+                <b-button @click="back()" style="width: 100px" variant="">Back</b-button>
+                <b-button @click="submitQuestionnaire()" style="width: 100px" variant="success">Submit</b-button>
             </div>
             <div v-else-if="state === 'welcome'">
                 <welcome-comp/>
-                <b-button @click="next()" style="width: 15%" variant="success">Next</b-button>
+                <b-button @click="next()" style="width: 100px" variant="success">Next</b-button>
             </div>
 
 
