@@ -3,6 +3,7 @@ version: "3"
 services:
   gateway.rwoldhui.svc.cluster.local:
     build: ./gateway-service
+    image: rubenwo/hcaid-gateway-service
     restart: on-failure
     ports:
       - 443:443
@@ -13,8 +14,10 @@ services:
 
   backend.rwoldhui.svc.cluster.local:
     build: ./backend
+    image: rubenwo/hcaid-backend
     restart: on-failure
 
   web.rwoldhui.svc.cluster.local:
     build: ./frontend/web
+    image: rubenwo/hcaid-frontend
     restart: on-failure
