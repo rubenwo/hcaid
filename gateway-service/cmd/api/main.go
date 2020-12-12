@@ -6,6 +6,7 @@ import (
 	"github.com/rubenwo/home-automation/gateway-service/pkg/ingress"
 	"log"
 	"net/http"
+	"os"
 	"time"
 )
 
@@ -34,6 +35,21 @@ func main() {
 		AllowCredentials: true,
 	}).Handler(router)
 
+	if _, err := os.Stat("/certs/fullchain.pem"); os.IsNotExist(err) {
+		log.Println("certificate not found, reverting to HTTP")
+		if err := http.ListenAndServe(":80", handler); err != nil {
+			log.Fatal(err)
+		}
+		return
+	}
+	if _, err := os.Stat("/certs/privkey.pem"); os.IsNotExist(err) {
+		log.Println("keyfile not found, reverting to HTTP")
+		if err := http.ListenAndServe(":80", handler); err != nil {
+			log.Fatal(err)
+		}
+		return
+	}
+
 	tlsCfg := &tls.Config{
 		MinVersion: tls.VersionTLS12,
 		//CurvePreferences:         []tls.CurveID{tls.CurveP521, tls.CurveP384, tls.CurveP256},
@@ -54,6 +70,7 @@ func main() {
 		WriteTimeout: time.Second * 60,
 		IdleTimeout:  time.Second * 120,
 	}
+
 	go func() {
 		if err := http.ListenAndServe(":80", handler); err != nil {
 			log.Fatal(err)
